@@ -1,0 +1,154 @@
+.result-container {
+    display: block;
+    position: relative;
+    width: 600px;
+    height: 200px;
+    left: 15%;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 30px;
+}
+
+.row{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    column-gap: 80px;
+    row-gap: 20px;
+    flex-wrap: wrap;
+}
+
+.text{
+    font-size: 17px;
+    font-family: 'Roboto';
+    font-weight: bold;
+    color: rgb(174, 173, 183);
+}
+
+.result{
+    font-size: 60px;
+    font-weight: bold;
+    font-family: 'Roboto';
+    color: rgb(198, 151, 70);
+}
+
+.result2{
+    font-size: 40px;
+    font-weight: bold;
+    font-family: 'Roboto';
+    color: rgb(198, 151, 70);
+}
+
+.test-complete{
+    position: relative;
+    left: 15%;
+    margin-top: 50px;
+    font-family: 'Roboto';
+    font-weight: bold;
+    font-size: 40px;
+    color: rgb(240, 229, 192);
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    column-gap: 100px;
+}
+
+.button {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    width: 30px;
+    height: 30px;
+}
+
+.icon {
+    color: rgb(53, 53, 65);
+    width: 30px;
+    height: 30px;
+    transition: color 0.1s;
+}
+
+.icon:hover{
+    color: rgb(191, 191, 191);
+}
+
+.icon:active{
+    color: rgb(255, 255, 255);
+}
+
+.animal-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.animal-result{
+    font-size: 40px;
+    font-family: 'Roboto';
+    font-weight: bold;
+    color: rgb(240, 229, 192);
+}
+
+.big-boi-container{
+    display: flex;
+    gap: 250px;
+}
+
+.image{
+    width: 136px;
+    height: 136px;
+}
+
+.tag-line{
+    font-size: 20px;
+    font-family: 'Roboto';
+    color: rgb(240, 229, 192);
+}
+
+.trophy{
+    width: 50px;
+    height: 50px;
+}
+
+.best-flex{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    gap: 10px;
+}
+
+.best-container{
+    visibility: hidden;
+}
+
+.typeverse-container{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 30px;
+    margin-left: 50px;
+    gap: 15px;
+}
+
+.logo{
+    width: 70px;
+    height: auto;
+    color: rgb(247, 223, 145);
+}
+
+.typeverse-text{
+    font-family: 'Roboto';
+    font-size: 50px;
+    font-weight: bold;
+    color: rgb(240, 229, 192);
+}
+

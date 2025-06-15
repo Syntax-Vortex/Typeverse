@@ -1,0 +1,167 @@
+.text-grid {
+    display: grid;
+    max-width: 70%;
+    margin: 0 auto;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3,1fr);
+    color: rgb(129, 128, 135);
+    margin-top: 50px;
+    align-items: center;
+    justify-items: center;
+    font-size: 35px;
+    row-gap: 0px;
+}
+
+.word {
+    display: inline-block;
+    font-family: 'Roboto mono';
+    font-size: 35px;
+    line-height: 45px;
+    margin: 0px 5px;
+    color: rgb(59, 59, 59);
+}
+
+.text {
+    margin: 5px;
+}
+
+.timer {
+    margin-top: 120px;
+    margin-left: 15%;
+    margin-bottom: 10px;
+    font-size: 30px;
+}
+
+.content {
+    position: relative;
+    height: 135px;
+    overflow: hidden;
+    margin: 0px 15%;
+    outline: 0;
+    user-select: none;
+}
+
+.words-container {
+    transition: margin-top 0.1s;
+}
+
+.focus {
+    position: absolute;
+    display: none;
+    inset: 0; /*basically top: 0, left: 0, right: 0, botton: 0 */
+    font-size: 35px;
+    text-align: center;
+    padding-top: 45px;
+    color: rgb(240, 229, 192);
+    font-family: 'Roboto';
+    font-weight: bold;
+}
+
+.blur {
+    filter: blur(5px);
+}
+
+.correct {
+    color: white;
+}
+
+.incorrect {
+    color: rgb(255, 0, 0);
+}
+
+.cursor {
+    display: block;
+    width: 2px;
+    height: 33px;
+    background-color: white;
+    position: absolute;
+    top: 6px;
+    left: 0;
+    transition: left 0.1s;
+}
+
+.cursor-animate{
+    animation: blink 1s infinite;
+}
+
+@keyframes blink{
+    0%{
+        opacity: 1;
+    }
+    50%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+}
+
+.typeverse-container{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 30px;
+    margin-left: 50px;
+    gap: 15px;
+}
+
+.logo{
+    width: 70px;
+    height: auto;
+    color: rgb(247, 223, 145);
+}
+
+.typeverse-text{
+    font-family: 'Roboto';
+    font-size: 50px;
+    font-weight: bold;
+    color: rgb(240, 229, 192);
+}
+
+.differentiator{
+    background-color: rgb(13, 13, 16);
+    height: 30px;
+    width: 7px;
+    border: none;
+    border-radius: 5px;
+}
+
+.group{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 30px;
+}
+
+.group input[type='radio']:checked + label{
+    color: rgb(240, 229, 192);
+}
+
+.radio-text{
+    font-size: 17px;
+    font-family: 'Roboto';
+    color: rgb(129, 128, 135);
+    transition: color 0.15s;
+}
+
+.radio-text:hover{
+    color: rgb(235, 235, 235);
+}
+
+.radio-text:active{
+    color: rgb(249, 227, 155);
+}
+
+.radio-button{
+    display: none;
+}
+
+.custom-pic{
+    width: 20px;
+    height: auto;
+    margin-top: 2px;
+}
+
+.custom-label{
+    height: 23px;
+}

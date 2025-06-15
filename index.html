@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="Stylesheet" href="styles/main.css">
+        <link rel="Stylesheet" href="styles/testScreen.css">
+        <title>Type</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital@0;1&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital@0;1&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="typeverse-container">
+            <div>
+                <svg class="logo" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-keyboard-icon lucide-keyboard"><path d="M10 8h.01"/><path d="M12 12h.01"/><path d="M14 8h.01"/><path d="M16 12h.01"/><path d="M18 8h.01"/><path d="M6 8h.01"/><path d="M7 16h10"/><path d="M8 12h.01"/><rect width="20" height="16" x="2" y="4" rx="2"/></svg>
+            </div>
+            <div class="typeverse-text">
+                Typeverse
+            </div>
+        </div>
+
+        <div class="bar">
+            <div class="group">
+                <input class="radio-button" type="radio" name="mode" id="timed" value="timed">
+                <label class="radio-text" for="timed">Time</label>
+
+                <input class="radio-button" type="radio" name="mode" id="words" value="words">
+                <label class="radio-text" for="words">Words</label>
+
+                <input class="radio-button" type="radio" name="mode" id="zen" value="zen">
+                <label class="radio-text" for="zen">Zen</label>
+
+                <input class="radio-button" type="radio" name="mode" id="custom" value="custom">
+                <label class="radio-text custom-label" for="custom"><svg class="custom-pic" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-ruler-icon lucide-pencil-ruler"><path d="M13 7 8.7 2.7a2.41 2.41 0 0 0-3.4 0L2.7 5.3a2.41 2.41 0 0 0 0 3.4L7 13"/><path d="m8 6 2-2"/><path d="m18 16 2-2"/><path d="m17 11 4.3 4.3c.94.94.94 2.46 0 3.4l-2.6 2.6c-.94.94-2.46.94-3.4 0L11 17"/><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg></label>
+            </div>
+            
+            <div class="differentiator"></div>
+
+            <div class="group">
+                <input class="radio-button" type="radio" name="duration" id="30" value="30">
+                <label class="radio-text" for="30">30</label>
+
+                <input class="radio-button" type="radio" name="duration" id="60" value="60">
+                <label class="radio-text" for="60">60</label>
+
+                <input class="radio-button" type="radio" name="duration" id="120" value="120">
+                <label class="radio-text" for="120">120</label>
+
+                <input class="radio-button" type="radio" name="duration" id="customDuration" value="customDuration">
+                <label class="radio-text custom-label" for="customDuration"><svg class="custom-pic" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-ruler-icon lucide-pencil-ruler"><path d="M13 7 8.7 2.7a2.41 2.41 0 0 0-3.4 0L2.7 5.3a2.41 2.41 0 0 0 0 3.4L7 13"/><path d="m8 6 2-2"/><path d="m18 16 2-2"/><path d="m17 11 4.3 4.3c.94.94.94 2.46 0 3.4l-2.6 2.6c-.94.94-2.46.94-3.4 0L11 17"/><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg></label>
+            </div>
+        </div>
+
+        <div class="timer">30</div>
+
+        <div class="content" tabindex="0">
+            <div class="js-words-container words-container"></div>
+            <div class="js-cursor cursor cursor-animate"></div>
+            <div class="focus">Click here to focus</div>
+        </div>
+        
+        <script src="scripts/main.js" type = 'module'></script>
+        <script src="scripts/cursor.js"></script>
+    </body>
+</html>
