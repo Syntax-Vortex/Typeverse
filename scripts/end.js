@@ -1,12 +1,24 @@
 import { wpm, accuracy } from "./utils/results.js";
 import { animals } from './data/animals.js';
-import { nextTest, retryTest } from "./endScreenButtons.js";
+import { timeStats } from "./stats.js";
 
 let stats = JSON.parse(localStorage.getItem('results'));
 let best = JSON.parse(localStorage.getItem('best'));
 let newBest = false;
 
-const wordsPerMin = wpm(stats.wordStats.correctLetters, stats.timeStats.maxTime);
+let wordsPerMin = 0;
+let testMode = ``;
+let testTime = 0;
+
+if(stats.gameStats.currentMode === 'timed'){
+    wordsPerMin = wpm(stats.wordStats.correctLetters, stats.timeStats.maxTime);
+    testMode = `time ${stats.timeStats.maxTime}`;
+    testTime = stats.timeStats.maxTime;
+}else if(stats.gameStats.currentMode === 'words'){
+    wordsPerMin = wpm(stats.wordStats.correctLetters, stats.timeStats.timeRemaining);
+    testMode = `words ${stats.gameStats.currentSetting}`;
+    testTime = stats.timeStats.timeRemaining;
+}
 
 let animalResult = {
     animal: 'sloth',
@@ -48,7 +60,7 @@ document.querySelector('.big-boi-container').innerHTML = `
                 <div class="row">
                         <div class="mode">
                         <div class="text">Test mode</div>
-                        <div class="test-mode result2">time ${stats.timeStats.maxTime}</div>
+                        <div class="test-mode result2">${testMode}</div>
                     </div>
                     <div class="characters">
                         <div class="text">correct/incorrect/extra</div>
@@ -56,7 +68,7 @@ document.querySelector('.big-boi-container').innerHTML = `
                     </div>
                     <div class="time">
                         <div class="text">Test time</div>
-                        <div class="time-result result2">${stats.timeStats.maxTime}s</div>
+                        <div class="time-result result2">${testTime}s</div>
                     </div>
                 </div>
 
@@ -71,8 +83,16 @@ document.querySelector('.big-boi-container').innerHTML = `
 
 document.querySelector('.next-test').addEventListener('click', () => {
     nextTest();
-})
+});
 
 document.querySelector('.repeat-test').addEventListener('click', () => {
     retryTest();
-})
+});
+
+function nextTest(){
+    window.location.href = 'index.html?type=next';
+}
+
+function retryTest(){
+    window.location.href = 'index.html?type=retry';
+}

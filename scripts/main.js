@@ -1,9 +1,24 @@
 import { formatWord, randomWord, moveWordsUp, moveWordsDown, currentTestWords } from "./generate-words.js";
 import { addClass, removeClass } from "./utils/classes.js";
-import { countdown, timeStats, wordStats} from "./stats.js";
+import { countdown, timeStats, wordStats, gameStats, countup} from "./stats.js";
+import { generateTimedSettings, generateWordsSettings } from "./generate-mode-settings.js";
 
 function start() {
+    document.querySelector('.js-words-container').innerHTML = '';
+    currentTestWords.length = 0;
     for(let i = 0;i<100;i++){
+        const word = randomWord();
+        document.querySelector('.js-words-container').innerHTML += formatWord(word);
+        currentTestWords.push(word);
+    }
+    addClass(document.querySelector('.word'),'current');
+    addClass(document.querySelector('.letter'),'current');
+}
+
+export function wordsStart(currentSetting) {
+    document.querySelector('.js-words-container').innerHTML = '';
+    currentTestWords.length = 0;
+    for(let i = 0;i<currentSetting;i++){
         const word = randomWord();
         document.querySelector('.js-words-container').innerHTML += formatWord(word);
         currentTestWords.push(word);
@@ -19,6 +34,26 @@ function retry(){
             document.querySelector('.js-words-container').innerHTML += formatWord(word);
             currentTestWords.push(word);
         });
+        let stats = JSON.parse(localStorage.getItem('results'));
+        if(stats.gameStats.currentMode === 'timed'){
+            document.querySelectorAll('input[name="mode"]').forEach(radio => {
+                radio.checked = (radio.value === 'timed');
+            });
+            document.querySelectorAll('input[name="duration"]').forEach(radio => {
+                radio.checked = (Number(radio.value) === stats.timeStats.maxTime);
+            });
+        }else if(stats.gameStats.currentMode === 'words'){
+            document.querySelectorAll('input[name="mode"]').forEach(radio => {
+                radio.checked = (radio.value === 'words');
+            });
+            generateWordsSettings();
+            document.querySelectorAll('input[name="wordCount"]').forEach(radio => {
+                radio.checked = (radio.value === stats.gameStats.currentSetting);
+            });
+            currentTestWords.length = 0;
+            gameStats.currentMode = 'words';
+            timeStats.timeRemaining = 0;
+        }
         addClass(document.querySelector('.word'),'current');
         addClass(document.querySelector('.letter'),'current');
     }else{
@@ -52,18 +87,34 @@ document.querySelector('.content').addEventListener('keydown', (event) => {
     let currentWord = document.querySelector('.current.word');
     const expectedKey = currentLetter?.innerHTML || ' ';
     
-    if(!timeStats.timeRunning){
+    if(gameStats.currentMode ==='timed' && !timeStats.timeRunning){
+        console.log('yea');
+        timeStats.timeRemaining = timeStats.maxTime;
         timeStats.timeRunning = true;
         const intervalID = setInterval(()=>{
             if(timeStats.timeRemaining <= 0){
                 clearInterval(intervalID);
                 end();
             }else{
-                countdown()
-                document.querySelector('.timer').innerHTML = `${timeStats.timeRemaining}`;
+                if(gameStats.currentMode === 'timed'){
+                    countdown();
+                    document.querySelector('.timer').innerHTML = `${timeStats.timeRemaining}`;
+                }
             }
             
         }, 1000);
+    }else if(gameStats.currentMode === 'words'){
+        if(!timeStats.timeRunning){
+            timeStats.timeRunning = true;
+            const intervalID = setInterval(()=>{
+            countup();
+            document.querySelector('.timer').innerHTML = `${timeStats.timeRemaining}`;
+            
+        }, 1000);
+        }
+        if(key === expectedKey && currentLetter === currentWord.lastChild && !currentWord.nextSibling){
+            end();
+        }
     }
 
     if(key != ' ' && key != 'Backspace'){
@@ -195,7 +246,8 @@ document.querySelector('.content').addEventListener('keydown', (event) => {
 function end(){
     const obj = {
         wordStats: wordStats,
-        timeStats: timeStats
+        timeStats: timeStats,
+        gameStats: gameStats
     }
     localStorage.setItem('currentTestWords', JSON.stringify(currentTestWords));
     localStorage.setItem('results',JSON.stringify(obj));
@@ -206,11 +258,57 @@ document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
     const type = params.get('type');
 
-    if (type === 'newTimed') {
-        start();
+    if (type === 'next') {
+        let stats = JSON.parse(localStorage.getItem('results'));
+        if(stats.gameStats.currentMode === 'timed'){
+            document.querySelectorAll('input[name="mode"]').forEach(radio => {
+                radio.checked = (radio.value === 'timed');
+            });
+            document.querySelectorAll('input[name="duration"]').forEach(radio => {
+                radio.checked = (Number(radio.value) === stats.timeStats.maxTime);
+            });
+            start();
+        }else if(stats.gameStats.currentMode === 'words'){
+            document.querySelectorAll('input[name="mode"]').forEach(radio => {
+                radio.checked = (radio.value === 'words');
+            });
+            document.querySelectorAll('input[name="wordCount"]').forEach(radio => {
+                radio.checked = (radio.value === stats.gameStats.currentSetting);
+            });
+            wordsStart(stats.gameStats.currentSetting);
+        }
     }else if(type === 'retry'){
         retry();
     }else{
         start();
     }
 });
+
+document.querySelectorAll('input[name="mode"]').forEach((radio) => {
+  radio.addEventListener('change', () => {
+    if(radio.value === 'timed'){
+        gameStats.currentMode = 'timed';
+        timeStats.maxTime = 30;
+        generateTimedSettings();
+        start();
+        console.log(gameStats)
+    }else if(radio.value === 'words'){
+        timeStats.timeRemaining = 0;
+        gameStats.currentMode = 'words';
+        generateWordsSettings();
+        wordsStart(gameStats.currentSetting);
+    }else if(radio.value === 'zen'){
+
+    }else if(radio.value === 'custom'){
+
+    }
+  });
+});
+
+const checkedModeRadio = document.querySelector('input[name="mode"]:checked');
+if(checkedModeRadio){
+    if(checkedModeRadio.value === 'timed'){
+        generateTimedSettings();
+        document.querySelector('.timer').innerHTML = Number(document.querySelector('input[name="duration"]:checked').value);
+    }
+}

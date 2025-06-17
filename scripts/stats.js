@@ -11,6 +11,15 @@ export let wordStats = {
     extraLetters: 0
 }
 
+export let gameStats = {
+    currentMode: 'timed',
+    currentSetting: '25'
+}
+
 export function countdown(){
     timeStats.timeRemaining--;
+}
+
+export function countup(){
+    timeStats.timeRemaining++;
 }
