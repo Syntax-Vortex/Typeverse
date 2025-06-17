@@ -34,6 +34,7 @@ function retry(){
             document.querySelector('.js-words-container').innerHTML += formatWord(word);
             currentTestWords.push(word);
         });
+        console.log(currentTestWords);
         let stats = JSON.parse(localStorage.getItem('results'));
         if(stats.gameStats.currentMode === 'timed'){
             document.querySelectorAll('input[name="mode"]').forEach(radio => {
@@ -50,7 +51,6 @@ function retry(){
             document.querySelectorAll('input[name="wordCount"]').forEach(radio => {
                 radio.checked = (radio.value === stats.gameStats.currentSetting);
             });
-            currentTestWords.length = 0;
             gameStats.currentMode = 'words';
             timeStats.timeRemaining = 0;
         }
@@ -60,6 +60,20 @@ function retry(){
         start();
     }
     
+}
+
+let wordLoops = 1;
+
+function fillMoreWords(){
+    let HTML = '';
+    for(let i = 0;i<100;i++){
+        const word = randomWord();
+        HTML += formatWord(word)
+        currentTestWords.push(word);
+    }
+    document.querySelector('.js-words-container').insertAdjacentHTML('beforeend', HTML);
+    wordLoops++;
+    console.log("filled more words");
 }
 
 window.addEventListener('load', () => {
@@ -87,6 +101,10 @@ document.querySelector('.content').addEventListener('keydown', (event) => {
     let currentWord = document.querySelector('.current.word');
     const expectedKey = currentLetter?.innerHTML || ' ';
     
+    if(wordStats.typedWords >= wordLoops * 80){
+        fillMoreWords();
+    }
+
     if(gameStats.currentMode ==='timed' && !timeStats.timeRunning){
         console.log('yea');
         timeStats.timeRemaining = timeStats.maxTime;
@@ -167,6 +185,7 @@ document.querySelector('.content').addEventListener('keydown', (event) => {
             if(currentWord.nextSibling) addClass(currentWord.nextSibling, 'current');
             if(currentWord.nextSibling.firstChild) addClass(currentWord.nextSibling.firstChild, 'current');
         }
+        wordStats.typedWords++;
     }
     
     if(key === 'Backspace'){
@@ -179,6 +198,7 @@ document.querySelector('.content').addEventListener('keydown', (event) => {
                     console.log('uncounted space');
                 } 
                 
+                wordStats.typedWords--;
 
                 removeClass(currentWord, 'current');
                 addClass(currentWord.previousSibling, 'current');

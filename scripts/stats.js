@@ -5,6 +5,7 @@ export let timeStats = {
 }
 
 export let wordStats = {
+    typedWords: 0,
     correctWords: 0,
     correctLetters: 0,
     incorrectLetters: 0,
