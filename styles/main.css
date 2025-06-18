@@ -11,7 +11,7 @@ body {
     align-items: center;
     background-color: rgb(29, 29, 36);
     color: rgb(0, 0, 0);
-    width: 32%;
+    width: 486px;
     height: 40px;
     left: 50%;
     transform: translateX(-50%);
@@ -19,7 +19,7 @@ body {
     border-radius: 5px;
     padding-left: 15px;
     padding-right: 15px;
-    gap: 30px;
+    gap: 25px;
     transition: opacity 0.2s, visibility 0.2s;
 }
 

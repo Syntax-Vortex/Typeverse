@@ -19,6 +19,10 @@ if(stats.gameStats.currentMode === 'timed'){
     wordsPerMin = wpm(stats.wordStats.correctLetters, stats.timeStats.timeRemaining);
     testMode = `words ${stats.gameStats.currentSetting}`;
     testTime = stats.timeStats.timeRemaining;
+}else if(stats.gameStats.currentMode === 'custom'){
+    wordsPerMin = wpm(stats.wordStats.correctLetters, stats.timeStats.timeRemaining);
+    testMode = `custom words`;
+    testTime = stats.timeStats.timeRemaining;
 }
 
 let animalResult = {

@@ -1,7 +1,7 @@
 import { formatWord, randomWord, moveWordsUp, moveWordsDown, currentTestWords } from "./generate-words.js";
 import { addClass, removeClass } from "./utils/classes.js";
 import { countdown, timeStats, wordStats, gameStats, countup} from "./stats.js";
-import { generateTimedSettings, generateWordsSettings } from "./generate-mode-settings.js";
+import { generateCustomWordsSettings, generateTimedSettings, generateWordsSettings } from "./generate-mode-settings.js";
 
 function start() {
     document.querySelector('.js-words-container').innerHTML = '';
@@ -64,6 +64,15 @@ function retry(){
             gameStats.currentMode = 'words';
             gameStats.currentSetting = stats.gameStats.currentSetting;
             timeStats.timeRemaining = 0;
+        }else if(stats.gameStats.currentMode === 'custom'){
+            document.querySelectorAll('input[name="mode"]').forEach(radio => {
+                radio.checked = (radio.value === 'custom');
+            });
+            const arr = JSON.parse(localStorage.getItem('currentTestWords'));
+            timeStats.timeRemaining = 0;
+            document.querySelector('.js-custom-words-input').value = arr.join(' ');
+            generateCustomWordsSettings();
+            closePopup();
         }
         addClass(document.querySelector('.word'),'current');
         addClass(document.querySelector('.letter'),'current');
@@ -97,18 +106,41 @@ function customTimeLocked(value){
     if(!isNaN(value) && value > 0){
         timeStats.maxTime = value;
         document.querySelector('.timer').innerHTML = `${timeStats.maxTime}`;
-        addClass(inputBox, 'hidden');
     }   
-    
+    addClass(inputBox, 'hidden');
 }
 
 function customWordsLocked(value){
     if(!isNaN(value) && value > 0){
         gameStats.currentSetting = `${value}`
         wordsStart(value)
-        addClass(inputBox, 'hidden');
     } 
+    addClass(inputBox, 'hidden');
 }
+
+export function openPopup(){
+    removeClass(document.querySelector('.js-popup'), 'hidden');
+}
+
+function closePopup(){
+    addClass(document.querySelector('.js-popup'), 'hidden');
+    const customWords = document.querySelector('.js-custom-words-input').value.replace(/[\r\n]+/g, ' ').replace(/ {2,}/g, ' ').split(' ');
+    document.querySelector('.js-words-container').innerHTML = '';
+    currentTestWords.length = 0;
+    for(let i = 0;i<customWords.length;i++){
+        const word = customWords[i];
+        document.querySelector('.js-words-container').innerHTML += formatWord(word);
+        currentTestWords.push(word);
+    }
+    gameStats.currentMode = 'custom';
+
+    addClass(document.querySelector('.word'),'current');
+    addClass(document.querySelector('.letter'),'current');
+}
+
+document.querySelector('.custom-words-ok').addEventListener('click', () => {
+    closePopup();
+})
 
 window.addEventListener('load', () => {
     document.querySelector('.content').focus();
@@ -156,14 +188,14 @@ document.querySelector('.content').addEventListener('keydown', (event) => {
             }
             
         }, 1000);
-    }else if(gameStats.currentMode === 'words'){
+    }else if(gameStats.currentMode === 'words' || gameStats.currentMode === 'custom'){
         if(!timeStats.timeRunning){
             timeStats.timeRunning = true;
             hideHud();
             const intervalID = setInterval(()=>{
             countup();
             document.querySelector('.timer').innerHTML = `${timeStats.timeRemaining}`;
-            
+            console.log(timeStats);
         }, 1000);
         }
         if(key === expectedKey && currentLetter === currentWord.lastChild && !currentWord.nextSibling){
@@ -317,12 +349,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (type === 'next') {
         let stats = JSON.parse(localStorage.getItem('results'));
         if(stats.gameStats.currentMode === 'timed'){
+            let durationChecked = 0;
             document.querySelectorAll('input[name="mode"]').forEach(radio => {
                 radio.checked = (radio.value === 'timed');
             });
             document.querySelectorAll('input[name="duration"]').forEach(radio => {
                 radio.checked = (Number(radio.value) === stats.timeStats.maxTime);
+                if(radio.checked) durationChecked = 1;
             });
+            if(!durationChecked) document.querySelector('.custom-time').checked = true;
+            timeStats.maxTime = stats.timeStats.maxTime;
+            document.querySelector('.timer').innerHTML = timeStats.maxTime;
             start();
         }else if(stats.gameStats.currentMode === 'words'){
             gameStats.currentMode = 'words';
@@ -339,8 +376,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.querySelector('.custom-words').checked = true;
                 console.log('checked');
             }
-            console.log(wordCountChecked);
             wordsStart(stats.gameStats.currentSetting);
+        }else if(stats.gameStats.currentMode === 'custom'){
+            document.querySelectorAll('input[name="mode"]').forEach(radio => {
+                radio.checked = (radio.value === 'custom');
+            });
+            const arr = JSON.parse(localStorage.getItem('currentTestWords'));
+            timeStats.timeRemaining = 0;
+            document.querySelector('.js-custom-words-input').value = arr.join(' ');
+            generateCustomWordsSettings();
+            closePopup();
+            openPopup();
         }
     }else if(type === 'retry'){
         retry();
@@ -365,7 +411,8 @@ document.querySelectorAll('input[name="mode"]').forEach((radio) => {
     }else if(radio.value === 'zen'){
 
     }else if(radio.value === 'custom'){
-
+        generateCustomWordsSettings();
+        openPopup();
     }
   });
 });

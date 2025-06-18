@@ -1,5 +1,5 @@
 import { gameStats, timeStats } from "./stats.js";
-import {wordsStart} from './main.js'
+import {wordsStart, openPopup} from './main.js'
 import { removeClass } from "./utils/classes.js";
 
 export function generateTimedSettings(){
@@ -30,7 +30,6 @@ export function generateTimedSettings(){
         document.querySelectorAll('.custom-time').forEach(radio => {
             radio.addEventListener('change', () => {
                 const inputBox = document.querySelector('.js-custom-time-input');
-                inputBox.style.visibility = 'visible';
                 removeClass(inputBox, 'hidden');
                 inputBox.focus();
             });
@@ -70,9 +69,20 @@ export function generateWordsSettings(){
                 wordsStart(gameStats.currentSetting);
                 console.log(gameStats);*/
                 const inputBox = document.querySelector('.js-custom-time-input');
-                inputBox.style.visibility = 'visible';
                 removeClass(inputBox, 'hidden');
                 inputBox.focus();
             });
-    })
+    });
+}
+
+export function generateCustomWordsSettings(){
+    document.querySelector('.js-group-2').innerHTML = `
+        <button class="change radio-text">Change</button>
+    `;
+
+    document.querySelector('.timer').innerHTML = `0`;
+    
+    document.querySelector('.change').addEventListener('click', () => {
+        openPopup();
+    });
 }
