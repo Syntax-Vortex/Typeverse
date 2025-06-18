@@ -16,6 +16,7 @@ function start() {
 }
 
 export function wordsStart(currentSetting) {
+    timeStats.timeRemaining = 0;
     document.querySelector('.js-words-container').innerHTML = '';
     currentTestWords.length = 0;
     for(let i = 0;i<currentSetting;i++){
@@ -37,13 +38,21 @@ function retry(){
         console.log(currentTestWords);
         let stats = JSON.parse(localStorage.getItem('results'));
         if(stats.gameStats.currentMode === 'timed'){
+            let durationChecked = 0;
+            generateTimedSettings();
             document.querySelectorAll('input[name="mode"]').forEach(radio => {
                 radio.checked = (radio.value === 'timed');
             });
             document.querySelectorAll('input[name="duration"]').forEach(radio => {
                 radio.checked = (Number(radio.value) === stats.timeStats.maxTime);
+                if(radio.checked) durationChecked = 1;
             });
+        if(!durationChecked) document.querySelector('.custom-time').checked = 1;
+        timeStats.maxTime = stats.timeStats.maxTime;
+        document.querySelector('.timer').innerHTML = `${timeStats.maxTime}`;
+        console.log(timeStats);
         }else if(stats.gameStats.currentMode === 'words'){
+            let wordCountChecked = 0;
             document.querySelectorAll('input[name="mode"]').forEach(radio => {
                 radio.checked = (radio.value === 'words');
             });
@@ -51,7 +60,9 @@ function retry(){
             document.querySelectorAll('input[name="wordCount"]').forEach(radio => {
                 radio.checked = (radio.value === stats.gameStats.currentSetting);
             });
+            if(!wordCountChecked) document.querySelector('.custom-words').checked = 1;
             gameStats.currentMode = 'words';
+            gameStats.currentSetting = stats.gameStats.currentSetting;
             timeStats.timeRemaining = 0;
         }
         addClass(document.querySelector('.word'),'current');
@@ -74,6 +85,29 @@ function fillMoreWords(){
     document.querySelector('.js-words-container').insertAdjacentHTML('beforeend', HTML);
     wordLoops++;
     console.log("filled more words");
+}
+
+function hideHud(){
+    addClass(document.querySelector('.bar'), 'hidden');
+    addClass(document.querySelector('.typeverse-container'), 'hidden');
+    removeClass(document.querySelector('.timer'), 'hidden');
+}
+
+function customTimeLocked(value){
+    if(!isNaN(value) && value > 0){
+        timeStats.maxTime = value;
+        document.querySelector('.timer').innerHTML = `${timeStats.maxTime}`;
+        addClass(inputBox, 'hidden');
+    }   
+    
+}
+
+function customWordsLocked(value){
+    if(!isNaN(value) && value > 0){
+        gameStats.currentSetting = `${value}`
+        wordsStart(value)
+        addClass(inputBox, 'hidden');
+    } 
 }
 
 window.addEventListener('load', () => {
@@ -109,6 +143,7 @@ document.querySelector('.content').addEventListener('keydown', (event) => {
         console.log('yea');
         timeStats.timeRemaining = timeStats.maxTime;
         timeStats.timeRunning = true;
+        hideHud();
         const intervalID = setInterval(()=>{
             if(timeStats.timeRemaining <= 0){
                 clearInterval(intervalID);
@@ -124,6 +159,7 @@ document.querySelector('.content').addEventListener('keydown', (event) => {
     }else if(gameStats.currentMode === 'words'){
         if(!timeStats.timeRunning){
             timeStats.timeRunning = true;
+            hideHud();
             const intervalID = setInterval(()=>{
             countup();
             document.querySelector('.timer').innerHTML = `${timeStats.timeRemaining}`;
@@ -289,12 +325,21 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             start();
         }else if(stats.gameStats.currentMode === 'words'){
+            gameStats.currentMode = 'words';
+            let wordCountChecked = 0;
             document.querySelectorAll('input[name="mode"]').forEach(radio => {
                 radio.checked = (radio.value === 'words');
             });
+            generateWordsSettings();
             document.querySelectorAll('input[name="wordCount"]').forEach(radio => {
                 radio.checked = (radio.value === stats.gameStats.currentSetting);
+                if(radio.checked) wordCountChecked = 1;
             });
+            if(!wordCountChecked){
+                document.querySelector('.custom-words').checked = true;
+                console.log('checked');
+            }
+            console.log(wordCountChecked);
             wordsStart(stats.gameStats.currentSetting);
         }
     }else if(type === 'retry'){
@@ -332,3 +377,15 @@ if(checkedModeRadio){
         document.querySelector('.timer').innerHTML = Number(document.querySelector('input[name="duration"]:checked').value);
     }
 }
+
+const inputBox = document.querySelector('.js-custom-time-input');
+
+inputBox.addEventListener('keydown', (event) => {
+    if(event.key === 'Enter'){
+        gameStats.currentMode === 'timed'? customTimeLocked(Math.round(Number(inputBox.value))) : customWordsLocked(Math.round(Number(inputBox.value)));
+    }
+})
+
+inputBox.addEventListener('blur', () => {
+    gameStats.currentMode === 'timed'? customTimeLocked(Math.round(Number(inputBox.value))) : customWordsLocked(Math.round(Number(inputBox.value)));
+});

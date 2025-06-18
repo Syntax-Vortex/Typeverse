@@ -1,7 +1,7 @@
 .result-container {
     display: block;
     position: relative;
-    width: 600px;
+    width: 700px;
     height: 200px;
     left: 15%;
     margin-top: 20px;
@@ -152,3 +152,21 @@
     color: rgb(240, 229, 192);
 }
 
+.overlay{
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(13, 13, 16);
+    animation: load 0.5s 1 forwards;
+}
+
+@keyframes load{
+    0%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+        visibility: hidden;
+    }
+}

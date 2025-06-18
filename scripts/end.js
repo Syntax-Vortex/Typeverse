@@ -12,7 +12,8 @@ let testTime = 0;
 
 if(stats.gameStats.currentMode === 'timed'){
     wordsPerMin = wpm(stats.wordStats.correctLetters, stats.timeStats.maxTime);
-    testMode = `time ${stats.timeStats.maxTime}`;
+    if([30,60,120].includes(stats.timeStats.maxTime)) testMode = `time ${stats.timeStats.maxTime}`;
+    else testMode = `custom time`
     testTime = stats.timeStats.maxTime;
 }else if(stats.gameStats.currentMode === 'words'){
     wordsPerMin = wpm(stats.wordStats.correctLetters, stats.timeStats.timeRemaining);
@@ -89,10 +90,18 @@ document.querySelector('.repeat-test').addEventListener('click', () => {
     retryTest();
 });
 
+document.querySelector('.home').addEventListener('click', () => {
+    home();
+});
+
 function nextTest(){
     window.location.href = 'index.html?type=next';
 }
 
 function retryTest(){
     window.location.href = 'index.html?type=retry';
+}
+
+function home(){
+    window.location.href = 'index.html';
 }

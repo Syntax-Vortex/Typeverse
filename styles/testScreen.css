@@ -30,6 +30,7 @@
     margin-left: 15%;
     margin-bottom: 10px;
     font-size: 30px;
+    transition: opacity 0.2s, visibility 0.2s;
 }
 
 .content {
@@ -103,6 +104,7 @@
     margin-top: 30px;
     margin-left: 50px;
     gap: 15px;
+    transition: opacity 0.2s, visibility 0.2s;
 }
 
 .logo{
@@ -164,4 +166,42 @@
 
 .custom-label{
     height: 23px;
+}
+
+.custom-time-input{
+    position: absolute;
+    width: 150px;
+    height: 23px;
+    top: 45px;
+    left: 420px;
+
+    background-color: rgb(13, 13, 16);
+    color: rgb(240, 229, 192);
+    font-family: 'Roboto';
+    font-weight: bold;
+    outline: none;
+    border: 3px solid rgb(240, 229, 192);
+    border-radius: 10px;
+    opacity: 1;
+
+    visibility: hidden;
+    transition: opacity 0.15s, visibility 0.15s;
+}
+
+.hidden{
+    opacity: 0;
+    visibility: hidden;
+}
+
+.custom-time-input::placeholder{
+    color: rgb(235, 235, 235);
+    font-family: 'Roboto';
+    font-weight: bold;
+    opacity: 0.5;
+}
+
+.custom-time-input::-webkit-inner-spin-button,
+.custom-time-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
