@@ -81,7 +81,8 @@ export function generateCustomWordsSettings(){
     `;
 
     document.querySelector('.timer').innerHTML = `0`;
-    
+    timeStats.timeRemaining = 0;
+
     document.querySelector('.change').addEventListener('click', () => {
         openPopup();
     });
